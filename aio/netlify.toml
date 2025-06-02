@@ -1,6 +1,17 @@
 [build]
   base = "aio"
   command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "18.17.0"
+  NPM_VERSION = "9"
 
 [[plugins]]
-  package = "@netlify/plugin-nextjs" 
+  package = "@netlify/plugin-nextjs"
+  
+  [plugins.inputs]
+    includeRobotsTxt = false
+
+[functions]
+  node_bundler = "esbuild" 
