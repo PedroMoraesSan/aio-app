@@ -18,6 +18,13 @@ const nextConfig = {
     dangerouslyAllowSVG: true,
     unoptimized: true,
   },
+  env: {
+    CUSTOM_KEY: process.env.CUSTOM_KEY,
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
+  },
+  // Configurações específicas para Netlify
+  basePath: '',
+  assetPrefix: '',
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
       config.optimization.splitChunks = {

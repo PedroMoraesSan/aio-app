@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { StatusIcon } from "@/components/status-icon"
+import { fetchApi } from "@/lib/api"
 
 interface SystemStatusProps {
   className?: string
@@ -59,7 +60,7 @@ export function SystemStatus({ className }: SystemStatusProps) {
         setStatus("loading")
         addLog("Verificando conexão com a API Groq...")
 
-        const response = await fetch("/api/check-connection")
+        const response = await fetchApi("/check-connection")
         const data = await response.json()
 
         console.log("Connection check response:", data)
