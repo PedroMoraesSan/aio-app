@@ -6,10 +6,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    optimizeCss: true,
-    optimizePackageImports: ['lucide-react', 'framer-motion'],
-  },
   compress: true,
   poweredByHeader: false,
   images: {
@@ -22,9 +18,6 @@ const nextConfig = {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
     GROQ_API_KEY: process.env.GROQ_API_KEY,
   },
-  // Configurações específicas para Netlify
-  basePath: '',
-  assetPrefix: '',
   webpack: (config, { dev, isServer }) => {
     if (!dev && !isServer) {
       config.optimization.splitChunks = {
