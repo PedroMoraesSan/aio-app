@@ -1,0 +1,799 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: "Georgia", "Times New Roman", serif;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+@layer base {
+  :root {
+    /* Paleta baseada em #ffeec9 - tons clássicos e formais */
+    --background: 45 50% 96%; /* #faf8f2 - muito claro */
+    --foreground: 30 25% 15%; /* #2b2419 - marrom escuro */
+
+    --card: 45 40% 94%; /* #f5f1e8 */
+    --card-foreground: 30 25% 15%; /* #2b2419 */
+
+    --popover: 45 40% 94%; /* #f5f1e8 */
+    --popover-foreground: 30 25% 15%; /* #2b2419 */
+
+    --primary: 35 35% 25%; /* #453a2a - marrom médio */
+    --primary-foreground: 45 50% 96%; /* #faf8f2 */
+
+    --secondary: 42 30% 88%; /* #e8e0d1 - bege claro */
+    --secondary-foreground: 30 25% 20%; /* #332821 */
+
+    --muted: 42 25% 85%; /* #ddd4c5 */
+    --muted-foreground: 30 15% 40%; /* #5c5248 */
+
+    --accent: 40 35% 80%; /* #d4c7b0 - bege acentuado */
+    --accent-foreground: 30 25% 20%; /* #332821 */
+
+    --destructive: 0 65% 50%; /* #cc3333 */
+    --destructive-foreground: 45 50% 96%; /* #faf8f2 */
+
+    --border: 42 20% 82%; /* #d1c8b8 */
+    --input: 42 20% 82%; /* #d1c8b8 */
+    --ring: 35 35% 25%; /* #453a2a */
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* Paleta baseada em #1a0e00 - tons escuros e formais */
+    --background: 30 100% 5%; /* #1a0e00 */
+    --foreground: 45 40% 90%; /* #e8e0d1 */
+
+    --card: 30 80% 8%; /* #291a0d */
+    --card-foreground: 45 40% 90%; /* #e8e0d1 */
+
+    --popover: 30 80% 8%; /* #291a0d */
+    --popover-foreground: 45 40% 90%; /* #e8e0d1 */
+
+    --primary: 42 60% 70%; /* #c4b896 - dourado claro */
+    --primary-foreground: 30 100% 5%; /* #1a0e00 */
+
+    --secondary: 30 60% 12%; /* #3d2817 */
+    --secondary-foreground: 45 30% 85%; /* #ddd4c5 */
+
+    --muted: 30 50% 15%; /* #4d3322 */
+    --muted-foreground: 45 20% 65%; /* #a69c8f */
+
+    --accent: 35 50% 20%; /* #52422e */
+    --accent-foreground: 45 40% 90%; /* #e8e0d1 */
+
+    --destructive: 0 65% 60%; /* #e64545 */
+    --destructive-foreground: 45 40% 90%; /* #e8e0d1 */
+
+    --border: 30 40% 18%; /* #5c4a3a */
+    --input: 30 40% 18%; /* #5c4a3a */
+    --ring: 42 60% 70%; /* #c4b896 */
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Adicionar efeito de blur no header e melhorar formatação dos títulos */
+
+/* Adicionar efeito de blur no header */
+.header-blur {
+  backdrop-filter: blur(10px);
+  background-color: hsl(var(--background) / 0.8);
+  border-bottom: 1px solid hsl(var(--border) / 0.5);
+}
+
+/* Melhorar formatação dos títulos das mensagens */
+.message-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  margin-bottom: 0.25rem;
+  letter-spacing: -0.01em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.message-title-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.message-title-user {
+  background: linear-gradient(135deg, hsl(210, 100%, 95%), hsl(210, 100%, 85%));
+  color: hsl(210, 100%, 30%);
+}
+
+.dark .message-title-user {
+  background: linear-gradient(135deg, hsl(210, 70%, 30%), hsl(210, 70%, 20%));
+  color: hsl(210, 100%, 85%);
+}
+
+.message-title-assistant {
+  background: linear-gradient(135deg, hsl(150, 100%, 95%), hsl(150, 100%, 85%));
+  color: hsl(150, 100%, 30%);
+}
+
+.dark .message-title-assistant {
+  background: linear-gradient(135deg, hsl(150, 70%, 30%), hsl(150, 70%, 20%));
+  color: hsl(150, 100%, 85%);
+}
+
+/* Add more subtle borders for dark mode */
+.dark {
+  --border-opacity: 0.2;
+}
+
+/* Add smooth transition for theme changes */
+* {
+  transition:
+    background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Ensure input areas blend with background */
+textarea,
+input {
+  background-color: transparent !important;
+}
+
+/* Custom scrollbar elegante e minimalista */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--muted-foreground));
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Scrollbar específico para o chat */
+.chat-scroll::-webkit-scrollbar {
+  width: 3px;
+}
+
+.chat-scroll::-webkit-scrollbar-thumb {
+  background: hsl(var(--border) / 0.5);
+  border-radius: 2px;
+}
+
+.chat-scroll::-webkit-scrollbar-thumb:hover {
+  background: hsl(var(--border) / 0.8);
+}
+
+/* Custom scrollbar for textarea */
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground));
+}
+
+/* Add smooth animations for chat elements */
+.chat-message-appear {
+  animation: messageAppear 0.3s ease forwards;
+}
+
+@keyframes messageAppear {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Pop animation for buttons */
+@keyframes pop {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.pop-animation {
+  animation: pop 0.3s ease-out;
+}
+
+/* Mobile height optimization */
+@supports (-webkit-touch-callout: none) {
+  .h-[100dvh] {
+    height: -webkit-fill-available;
+  }
+}
+
+/* iOS Safari specific adjustments */
+@supports (-webkit-touch-callout: none) {
+  .h-[100svh] {
+    height: -webkit-fill-available;
+  }
+
+  /* Ensure content area is scrollable with bounce */
+  .overflow-y-auto {
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+/* Melhorar formatação das mensagens do chat */
+.prose {
+  color: inherit;
+}
+
+.prose p {
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  line-height: 1.6;
+}
+
+.prose p:first-child {
+  margin-top: 0;
+}
+
+.prose p:last-child {
+  margin-bottom: 0;
+}
+
+.prose pre {
+  background-color: hsl(var(--secondary));
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 0.75em 0;
+  font-size: 0.875em;
+}
+
+.prose code {
+  background-color: hsl(var(--secondary));
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.875em;
+  font-weight: 500;
+  border: 1px solid hsl(var(--border));
+}
+
+.prose pre code {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  font-size: inherit;
+}
+
+.prose h1,
+.prose h2,
+.prose h3,
+.prose h4,
+.prose h5,
+.prose h6 {
+  font-weight: 600;
+  margin-top: 1em;
+  margin-bottom: 0.5em;
+  line-height: 1.4;
+  color: hsl(var(--foreground));
+}
+
+.prose h1:first-child,
+.prose h2:first-child,
+.prose h3:first-child,
+.prose h4:first-child,
+.prose h5:first-child,
+.prose h6:first-child {
+  margin-top: 0;
+}
+
+.prose h1 {
+  font-size: 1.5em;
+}
+
+.prose h2 {
+  font-size: 1.3em;
+}
+
+.prose h3 {
+  font-size: 1.15em;
+}
+
+.prose h4 {
+  font-size: 1.05em;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.5em;
+  margin: 0.75em 0;
+}
+
+.prose ul:first-child,
+.prose ol:first-child {
+  margin-top: 0;
+}
+
+.prose ul:last-child,
+.prose ol:last-child {
+  margin-bottom: 0;
+}
+
+.prose li {
+  margin: 0.25em 0;
+  line-height: 1.6;
+}
+
+.prose blockquote {
+  border-left: 4px solid hsl(var(--border));
+  padding-left: 1em;
+  margin: 1em 0;
+  font-style: italic;
+  color: hsl(var(--muted-foreground));
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.875em;
+}
+
+.prose th,
+.prose td {
+  border: 1px solid hsl(var(--border));
+  padding: 0.5em;
+  text-align: left;
+}
+
+.prose th {
+  background-color: hsl(var(--secondary));
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.prose strong {
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.prose em {
+  font-style: italic;
+}
+
+.prose a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose a:hover {
+  text-decoration: none;
+}
+
+/* Animação suave para o streaming de texto */
+.prose {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Melhorar aparência dos scrollbars nas mensagens */
+.prose pre::-webkit-scrollbar {
+  height: 6px;
+}
+
+.prose pre::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.prose pre::-webkit-scrollbar-thumb {
+  background-color: hsl(var(--border));
+  border-radius: 3px;
+}
+
+.prose pre::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(var(--muted-foreground));
+}
+
+/* Melhorar contraste no modo escuro */
+.dark .text-muted-foreground {
+  color: hsl(0 0% 70%) !important;
+}
+
+.dark .border-border\/10 {
+  border-color: hsl(0 0% 20%) !important;
+}
+
+.dark .border-border\/20 {
+  border-color: hsl(0 0% 25%) !important;
+}
+
+.dark .bg-secondary\/30 {
+  background-color: hsl(0 0% 12%) !important;
+}
+
+.dark .bg-secondary\/50 {
+  background-color: hsl(0 0% 15%) !important;
+}
+
+/* Melhorar aparência dos botões no modo escuro */
+.dark button {
+  border-color: hsl(0 0% 25%);
+}
+
+.dark button:hover {
+  background-color: hsl(0 0% 15%);
+  border-color: hsl(0 0% 30%);
+}
+
+/* Melhorar aparência do thinking process no modo escuro */
+.dark .bg-gradient-to-r.from-blue-50\/50.to-indigo-50\/50 {
+  background: linear-gradient(to right, hsl(0 0% 8%), hsl(0 0% 10%)) !important;
+}
+
+.dark .border-blue-200\/30 {
+  border-color: hsl(0 0% 25%) !important;
+}
+
+.dark .bg-blue-100\/50 {
+  background-color: hsl(0 0% 15%) !important;
+}
+
+.dark .border-blue-200\/50 {
+  border-color: hsl(0 0% 30%) !important;
+}
+
+.dark .text-blue-700 {
+  color: hsl(0 0% 90%) !important;
+}
+
+/* Estilos específicos para botão de carregamento elegante */
+.loading-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.loading-button::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* Remover os estilos antigos de hover das mensagens */
+/* .message-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.message-hover:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.dark .message-hover:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+} */
+
+/* Novo hover apenas para o balão da mensagem */
+.message-bubble {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.message-bubble:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.dark .message-bubble:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilização para menções no textarea */
+.textarea-mention {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--primary) / 0.25));
+  color: hsl(var(--primary));
+  border-radius: 0.375rem;
+  padding: 0.125rem 0.375rem;
+  margin: 0 0.125rem;
+  font-weight: 500;
+  border: 1px solid hsl(var(--primary) / 0.3);
+  display: inline-block;
+  position: relative;
+}
+
+.dark .textarea-mention {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.25), hsl(var(--primary) / 0.35));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary) / 0.4);
+}
+
+/* Melhorar o dropdown de ações */
+.dropdown-item-hover {
+  transition: all 0.15s ease-out;
+}
+
+.dropdown-item-hover:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+  transform: translateX(2px);
+}
+
+/* Animação de cursor de digitação */
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.typing-cursor {
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background-color: currentColor;
+  margin-left: 2px;
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+}
+
+/* Otimização de renderização */
+.chat-message {
+  will-change: transform, opacity;
+  contain: content;
+}
+
+/* Melhorar desempenho de animações */
+.optimize-gpu {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* Animação de entrada suave para mensagens */
+@keyframes fadeInMessage {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-enter {
+  animation: fadeInMessage 0.3s ease-out forwards;
+}
+
+/* Reduzir o trabalho de renderização durante o streaming */
+.streaming-active * {
+  transition-duration: 0ms !important;
+}
+
+.streaming-active .animate-spin {
+  animation-duration: 1.5s !important;
+}
+
+/* Otimização crítica para performance durante streaming */
+.streaming-mode {
+  pointer-events: none;
+}
+
+.streaming-mode * {
+  transition: none !important;
+  animation-duration: 0s !important;
+}
+
+.streaming-mode .animate-spin {
+  animation: spin 1s linear infinite !important;
+}
+
+/* Animação de spin otimizada */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Otimizar renderização de mensagens */
+.message-container {
+  contain: layout style paint;
+  will-change: auto;
+}
+
+/* Cursor de digitação simples */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* Estilização melhorada para menções */
+.mention {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  margin: 0 0.125rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.2));
+  color: hsl(var(--primary));
+  border: 1px solid hsl(var(--primary) / 0.3);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.mention::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, hsl(var(--primary) / 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.mention:hover {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.3));
+  border-color: hsl(var(--primary) / 0.5);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px hsl(var(--primary) / 0.2);
+}
+
+.mention:hover::before {
+  left: 100%;
+}
+
+.dark .mention {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.3));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary) / 0.4);
+}
+
+.dark .mention:hover {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.3), hsl(var(--primary) / 0.4));
+  border-color: hsl(var(--primary) / 0.6);
+  box-shadow: 0 2px 8px hsl(var(--primary) / 0.3);
+}
+
+/* Journey Map Styles */
+.journey-map {
+  backdrop-filter: blur(8px);
+  background: hsl(var(--background) / 0.8);
+  border: 1px solid hsl(var(--border) / 0.5);
+}
+
+.journey-step {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+
+.journey-step:hover {
+  transform: translateX(4px);
+  background: hsl(var(--secondary) / 0.8);
+}
+
+.journey-step.active {
+  background: hsl(var(--primary) / 0.1);
+  border-color: hsl(var(--primary) / 0.3);
+}
+
+.journey-connector {
+  background: linear-gradient(to bottom, hsl(var(--border)), transparent);
+}
+
+/* Melhorar estilo das menções no textarea */
+.mention-highlight {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.1), hsl(var(--primary) / 0.2));
+  color: hsl(var(--primary));
+  border-radius: 0.25rem;
+  padding: 0.125rem 0.25rem;
+  margin: 0 0.125rem;
+  font-weight: 500;
+  border: 1px solid hsl(var(--primary) / 0.3);
+  display: inline-block;
+}
+
+.dark .mention-highlight {
+  background: linear-gradient(135deg, hsl(var(--primary) / 0.2), hsl(var(--primary) / 0.3));
+  color: hsl(var(--primary-foreground));
+  border-color: hsl(var(--primary) / 0.4);
+}

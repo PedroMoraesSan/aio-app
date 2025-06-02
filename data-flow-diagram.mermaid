@@ -1,0 +1,67 @@
+sequenceDiagram
+    participant U as 👤 Usuário
+    participant UI as 🖥️ Frontend
+    participant API as 🚪 API Gateway
+    participant Chat as 💬 Chat Service
+    participant LF as 🔄 LangFlow
+    participant Vec as 🔍 Vector DB
+    participant LLM as 🤖 Ollama/Llama
+    participant DB as 📦 SQLite/Postgres
+    participant Cache as 🚀 Redis
+
+    Note over U,Cache: Fluxo Principal - Chat com RAG
+
+    U->>UI: Pergunta sobre documento
+    UI->>API: POST /chat/message
+    
+    Note over API: Autenticação & Rate Limiting
+    API->>Chat: Processa mensagem
+    
+    Chat->>Cache: Verifica sessão ativa
+    Cache-->>Chat: Dados da sessão
+    
+    Chat->>DB: Salva mensagem do usuário
+    DB-->>Chat: Message ID
+    
+    Chat->>LF: Executa RAG Pipeline
+    
+    Note over LF: Pipeline RAG Ativo
+    LF->>LF: Gera embedding da query
+    LF->>Vec: Busca documentos similares
+    Vec-->>LF: Top-K documentos relevantes
+    
+    LF->>LF: Monta contexto + prompt
+    LF->>LLM: Requisição com contexto
+    
+    Note over LLM: Processamento Local
+    LLM-->>LF: Resposta gerada
+    
+    LF-->>Chat: Resposta final
+    
+    Chat->>DB: Salva resposta da IA
+    Chat->>Cache: Atualiza contexto da sessão
+    
+    Chat-->>API: Resposta processada
+    API-->>UI: JSON response
+    UI-->>U: Exibe resposta
+
+    Note over U,Cache: Fluxos Paralelos
+
+    rect rgb(240, 248, 255)
+        Note over Chat,Cache: Contexto de Atividades
+        Chat->>DB: Busca histórico da atividade
+        Chat->>Cache: Cache de contexto específico
+    end
+
+    rect rgb(255, 248, 240)
+        Note over LF,Vec: Ingestão de Documentos (Assíncrono)
+        Note over LF: Quando novos docs chegam:
+        LF->>LF: Chunking + Embedding
+        LF->>Vec: Armazena vetores
+    end
+
+    rect rgb(248, 255, 248)
+        Note over LLM: Otimizações Futuras
+        Note over LLM: Load Balancing entre modelos
+        Note over LLM: Cache de embeddings frequentes
+    end

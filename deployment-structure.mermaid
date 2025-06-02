@@ -1,0 +1,90 @@
+graph TB
+    subgraph "MVP - Ambiente Local"
+        subgraph "Docker Compose Stack"
+            MVPFront[📱 Frontend Container<br/>React + Nginx<br/>Port: 3000]
+            MVPBack[🔧 Backend Container<br/>FastAPI + LangFlow<br/>Port: 8000]
+            MVPOllama[🤖 Ollama Container<br/>Llama Models<br/>Port: 11434]
+            MVPChroma[🔍 Chroma Container<br/>Vector DB<br/>Port: 8001]
+            MVPRedis[🚀 Redis Container<br/>Cache & Sessions<br/>Port: 6379]
+        end
+        
+        subgraph "Volumes"
+            MVPData[📂 ./data/<br/>- sqlite/<br/>- documents/<br/>- models/]
+            MVPLogs[📋 ./logs/]
+        end
+    end
+
+    subgraph "Produção - Cloud/Kubernetes"
+        subgraph "Frontend Tier"
+            ProdCDN[🌐 CDN<br/>CloudFlare/AWS]
+            ProdNginx[🔀 Nginx Ingress<br/>Load Balancer]
+            ProdFrontPods[📱 Frontend Pods<br/>React SPA<br/>3 replicas]
+        end
+        
+        subgraph "API Tier"
+            ProdGateway[🚪 API Gateway<br/>Kong/Ambassador<br/>2 replicas]
+            ProdBackPods[🔧 Backend Pods<br/>FastAPI Services<br/>5 replicas]
+        end
+        
+        subgraph "AI Processing Tier"
+            ProdLangFlow[🔄 LangFlow Cluster<br/>Orchestration<br/>3 replicas]
+            ProdOllamaCluster[🤖 Ollama Cluster<br/>GPU Nodes<br/>Auto-scaling]
+        end
+        
+        subgraph "Data Tier"
+            ProdPostgres[🐘 PostgreSQL<br/>Master/Slave<br/>HA Setup]
+            ProdPinecone[☁️ Pinecone<br/>Managed Vector DB]
+            ProdRedisCluster[🚀 Redis Cluster<br/>High Availability]
+        end
+        
+        subgraph "Infrastructure"
+            ProdK8s[☸️ Kubernetes<br/>Auto-scaling<br/>Self-healing]
+            ProdMonitor[📊 Monitoring<br/>Prometheus + Grafana]
+            ProdLogs[📋 Logging<br/>ELK Stack]
+        end
+    end
+
+    %% MVP Connections
+    MVPFront -.-> MVPBack
+    MVPBack -.-> MVPOllama
+    MVPBack -.-> MVPChroma
+    MVPBack -.-> MVPRedis
+    MVPBack -.-> MVPData
+    MVPBack -.-> MVPLogs
+
+    %% Production Connections
+    ProdCDN --> ProdNginx
+    ProdNginx --> ProdFrontPods
+    ProdFrontPods --> ProdGateway
+    ProdGateway --> ProdBackPods
+    ProdBackPods --> ProdLangFlow
+    ProdLangFlow --> ProdOllamaCluster
+    ProdBackPods --> ProdPostgres
+    ProdLangFlow --> ProdPinecone
+    ProdBackPods --> ProdRedisCluster
+
+    %% Infrastructure monitoring
+    ProdK8s -.-> ProdMonitor
+    ProdK8s -.-> ProdLogs
+
+    %% Evolution Arrow
+    MVPBack ==> ProdBackPods
+    MVPFront ==> ProdFrontPods
+    MVPOllama ==> ProdOllamaCluster
+    MVPChroma ==> ProdPinecone
+
+    %% File Structure Annotations
+    subgraph "Estrutura de Arquivos"
+        FileStruct["📁 ai-chat-mvp/<br/>├── 🐳 docker-compose.yml<br/>├── 📂 backend/<br/>│   ├── 🐍 main.py<br/>│   ├── 📂 api/<br/>│   ├── 📂 services/<br/>│   ├── 📂 langflow_configs/<br/>│   └── 🔧 requirements.txt<br/>├── 📂 frontend/<br/>│   ├── ⚛️ src/<br/>│   ├── 📦 package.json<br/>│   └── 🐳 Dockerfile<br/>├── 📂 data/<br/>│   ├── 🔍 chroma/<br/>│   ├── 📄 documents/<br/>│   └── 🗃️ sqlite/<br/>├── 📂 scripts/<br/>│   ├── 🚀 setup.sh<br/>│   └── 🌱 seed_data.py<br/>└── 📂 k8s/ (produção)<br/>    ├── 📝 deployments/<br/>    ├── 🔧 services/<br/>    └── 🗂️ configmaps/"]
+    end
+
+    %% Styling
+    classDef mvp fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef prod fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef infra fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef data fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+
+    class MVPFront,MVPBack,MVPOllama,MVPChroma,MVPRedis,MVPData,MVPLogs mvp
+    class ProdCDN,ProdNginx,ProdFrontPods,ProdGateway,ProdBackPods,ProdLangFlow,ProdOllamaCluster prod
+    class ProdK8s,ProdMonitor,ProdLogs infra
+    class ProdPostgres,ProdPinecone,ProdRedisCluster data

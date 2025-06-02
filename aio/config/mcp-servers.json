@@ -1,0 +1,27 @@
+{
+  "mcpServers": {
+    "sequencial-thinking": {
+      "command": "npx",
+      "args": ["-y", "@smithery/cli@latest", "run", "@smithery-ai/server-sequential-thinking", "--config", "\"{}\""]
+    },
+    "browser-tools": {
+      "command": "npx",
+      "args": ["@agentdeskai/browser-tools-mcp@1.2.0"]
+    },
+    "fetch-content-tool": {
+      "command": "npx",
+      "args": ["-y", "@smithery/cli@latest", "run", "@smithery-ai/fetch", "--client", "cursor", "--config", "\"{}\""]
+    },
+    "Magic": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@smithery/cli@latest",
+        "run",
+        "@21st-dev/magic-mcp",
+        "--config",
+        "\"{\\\"TWENTY_FIRST_API_KEY\\\":\\\"eb6c52121e90dd02489d8144804cbbc997ff190f6ab4ebb932d3358a8e30527b\\\"}\""
+      ]
+    }
+  }
+}

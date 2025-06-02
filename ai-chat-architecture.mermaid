@@ -1,0 +1,160 @@
+graph TB
+    %% Frontend Layer
+    subgraph "Frontend (Interface do Usuário)"
+        UI[🖥️ React Web App]
+        Mobile[📱 Mobile App - Futuro]
+        PWA[🌐 PWA - Futuro]
+    end
+
+    %% API Gateway Layer
+    subgraph "API Layer"
+        Gateway[🚪 API Gateway<br/>FastAPI]
+        Auth[🔐 Authentication<br/>Middleware]
+        Rate[⚡ Rate Limiting]
+    end
+
+    %% Core Services Layer
+    subgraph "Core Services (MVP)"
+        ChatAPI[💬 Chat Service<br/>FastAPI]
+        SessionMgr[📝 Session Manager]
+        ActivityMgr[🎯 Activity Manager<br/>Context Switching]
+    end
+
+    %% LangFlow Orchestration
+    subgraph "LangFlow Engine"
+        LF[🔄 LangFlow Server]
+        
+        subgraph "Pipelines"
+            RAGFlow[📚 RAG Pipeline<br/>Query → Embed → Search → LLM]
+            ChatFlow[💭 Chat Pipeline<br/>Context → Prompt → LLM]
+            CodeFlow[👨‍💻 Code Analysis<br/>Specialized Pipeline]
+            BrainFlow[🧠 Brainstorm<br/>Creative Pipeline]
+        end
+        
+        Components[🧩 Custom Components]
+    end
+
+    %% LLM Processing
+    subgraph "LLM Layer (Local)"
+        Ollama[🤖 Ollama Server]
+        
+        subgraph "Models"
+            Llama[🦙 Llama 3.1/3.2]
+            CodeLlama[💻 Code Llama]
+            Mistral[⚡ Mistral]
+        end
+        
+        LoadBalancer[⚖️ Load Balancer<br/>Futuro]
+    end
+
+    %% Data Layer
+    subgraph "Data Storage"
+        subgraph "Vector Database"
+            ChromaMVP[🔍 Chroma DB<br/>MVP - Local]
+            PineconeCloud[☁️ Pinecone<br/>Produção]
+            DataStax[🗃️ DataStax Astra<br/>Produção]
+        end
+        
+        subgraph "Relational Database"
+            SQLiteMVP[📦 SQLite<br/>MVP]
+            PostgresProd[🐘 PostgreSQL<br/>Produção]
+        end
+        
+        subgraph "Cache Layer"
+            RedisCache[🚀 Redis<br/>Sessions & Cache]
+        end
+    end
+
+    %% Document Processing
+    subgraph "Document Pipeline"
+        DocUpload[📄 Document Upload]
+        TextExtract[📝 Text Extraction]
+        Chunking[✂️ Text Chunking]
+        Embedding[🔢 Embedding Generation]
+        VectorStore[💾 Vector Storage]
+    end
+
+    %% Monitoring & Infrastructure
+    subgraph "Infrastructure (Produção)"
+        Docker[🐳 Docker Containers]
+        K8s[☸️ Kubernetes]
+        Monitor[📊 Monitoring<br/>Prometheus + Grafana]
+        Logs[📋 Centralized Logs<br/>ELK Stack]
+    end
+
+    %% User Interactions
+    User[👤 Usuário] --> UI
+    User --> Mobile
+    User --> PWA
+
+    %% Frontend to API
+    UI --> Gateway
+    Mobile --> Gateway
+    PWA --> Gateway
+
+    %% API Gateway Flow
+    Gateway --> Auth
+    Gateway --> Rate
+    Gateway --> ChatAPI
+
+    %% Core Services Integration
+    ChatAPI --> SessionMgr
+    ChatAPI --> ActivityMgr
+    ChatAPI --> LF
+
+    %% LangFlow Orchestration
+    LF --> RAGFlow
+    LF --> ChatFlow
+    LF --> CodeFlow
+    LF --> BrainFlow
+    LF --> Components
+
+    %% LLM Integration
+    RAGFlow --> Ollama
+    ChatFlow --> Ollama
+    CodeFlow --> Ollama
+    BrainFlow --> Ollama
+
+    %% Ollama Models
+    Ollama --> Llama
+    Ollama --> CodeLlama
+    Ollama --> Mistral
+
+    %% Vector Database Flow
+    RAGFlow --> ChromaMVP
+    RAGFlow --> PineconeCloud
+    RAGFlow --> DataStax
+
+    %% Relational Database
+    SessionMgr --> SQLiteMVP
+    SessionMgr --> PostgresProd
+    ActivityMgr --> SQLiteMVP
+    ActivityMgr --> PostgresProd
+
+    %% Cache Integration
+    ChatAPI --> RedisCache
+    SessionMgr --> RedisCache
+
+    %% Document Processing Flow
+    DocUpload --> TextExtract
+    TextExtract --> Chunking
+    Chunking --> Embedding
+    Embedding --> VectorStore
+    VectorStore --> ChromaMVP
+    VectorStore --> PineconeCloud
+
+    %% Production Infrastructure
+    Docker -.-> K8s
+    K8s -.-> Monitor
+    K8s -.-> Logs
+
+    %% Styling
+    classDef mvp fill:#e1f5fe,stroke:#01579b,stroke-width:2px
+    classDef prod fill:#f3e5f5,stroke:#4a148c,stroke-width:2px
+    classDef core fill:#e8f5e8,stroke:#2e7d32,stroke-width:2px
+    classDef data fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
+
+    class ChromaMVP,SQLiteMVP mvp
+    class PineconeCloud,DataStax,PostgresProd,LoadBalancer,Mobile,PWA,K8s,Monitor,Logs prod
+    class LF,Ollama,ChatAPI core
+    class ChromaMVP,PineconeCloud,DataStax,SQLiteMVP,PostgresProd,RedisCache data
