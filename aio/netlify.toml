@@ -8,10 +8,4 @@
   NPM_VERSION = "9"
 
 [[plugins]]
-  package = "@netlify/plugin-nextjs"
-  
-  [plugins.inputs]
-    includeRobotsTxt = false
-
-[functions]
-  node_bundler = "esbuild" 
+  package = "@netlify/plugin-nextjs" 
