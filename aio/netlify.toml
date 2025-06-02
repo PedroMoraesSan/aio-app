@@ -2,38 +2,5 @@
   base = "aio"
   command = "npm run build"
 
-[build.environment]
-  NODE_VERSION = "18"
-
-# Plugin do Next.js para Netlify
 [[plugins]]
-  package = "@netlify/plugin-nextjs"
-
-# Headers de segurança
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-XSS-Protection = "1; mode=block"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-eval' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.groq.com https://*.groq.com https://aiodemo.netlify.app;"
-
-# Headers para recursos estáticos
-[[headers]]
-  for = "/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-[[headers]]
-  for = "/_next/static/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Configuração de Functions
-[functions]
-  node_bundler = "esbuild"
-
-# Configuração para Edge Functions (se necessário)
-[edge_functions]
-  directory = "aio/.next/server/edge" 
+  package = "@netlify/plugin-nextjs" 

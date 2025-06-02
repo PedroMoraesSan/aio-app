@@ -23,8 +23,31 @@ if (fs.existsSync(netlifyTomlPath)) {
   } else {
     checks.push({ name: 'Plugin Next.js configurado no TOML', status: '❌' })
   }
+  
+  // Verificar se não há configurações problemáticas
+  if (tomlContent.includes('edge_functions') && !tomlContent.includes('[[edge_functions]]')) {
+    checks.push({ name: 'Configuração edge_functions problemática', status: '❌ REMOVA' })
+  } else {
+    checks.push({ name: 'Sem configurações problemáticas', status: '✅' })
+  }
+  
+  // Verificar se é configuração mínima
+  const lines = tomlContent.split('\n').filter(line => line.trim() && !line.startsWith('#'))
+  if (lines.length <= 6) {
+    checks.push({ name: 'Configuração mínima (recomendado)', status: '✅' })
+  } else {
+    checks.push({ name: 'Configuração mínima (recomendado)', status: '⚠️  Considere simplificar' })
+  }
 } else {
   checks.push({ name: 'netlify.toml existe', status: '❌' })
+}
+
+// Verificar .nvmrc
+const nvmrcPath = path.join(__dirname, '..', '.nvmrc')
+if (fs.existsSync(nvmrcPath)) {
+  checks.push({ name: '.nvmrc existe (Node.js version)', status: '✅' })
+} else {
+  checks.push({ name: '.nvmrc existe (Node.js version)', status: '⚠️  Recomendado' })
 }
 
 // Verificar se o plugin do Netlify está instalado
@@ -102,6 +125,14 @@ if (fs.existsSync(testPagePath)) {
   checks.push({ name: 'Página de teste criada', status: '❌' })
 }
 
+// Verificar se não há _redirects conflitante
+const redirectsPath = path.join(__dirname, '..', 'public', '_redirects')
+if (!fs.existsSync(redirectsPath)) {
+  checks.push({ name: 'Sem _redirects conflitante', status: '✅' })
+} else {
+  checks.push({ name: 'Sem _redirects conflitante', status: '⚠️  _redirects pode conflitar' })
+}
+
 // Mostrar resultados
 console.log('📊 Resultados da verificação:\n')
 checks.forEach(check => {
@@ -110,6 +141,7 @@ checks.forEach(check => {
 
 const allPassed = checks.every(check => check.status === '✅')
 const hasWarnings = checks.some(check => check.status.includes('⚠️'))
+const hasErrors = checks.some(check => check.status.includes('❌'))
 
 console.log('\n' + '='.repeat(50))
 if (allPassed) {
@@ -120,11 +152,11 @@ if (allPassed) {
   console.log('2. Configure as variáveis de ambiente no Netlify')
   console.log('3. Faça o deploy')
   console.log('4. Teste a página: https://seu-site.netlify.app/test')
+} else if (hasErrors) {
+  console.log('❌ Há erros que precisam ser corrigidos')
+  console.log('🔧 Corrija os itens marcados com ❌ antes do deploy')
 } else if (hasWarnings) {
   console.log('⚠️  Algumas verificações têm avisos')
-  console.log('📝 Execute as ações recomendadas antes do deploy')
-} else {
-  console.log('⚠️  Algumas verificações falharam')
-  console.log('❌ Revise as configurações antes do deploy')
+  console.log('📝 Recomendado corrigir, mas deploy pode funcionar')
 }
 console.log('='.repeat(50)) 
